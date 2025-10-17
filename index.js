@@ -3,12 +3,14 @@ const mongoose = require("mongoose")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 require("dotenv").config()
+const path = require("path")
 
 const app = express()
 // Middleware
-app.use(cors({ origin: true, credentials: true }))
+app.use(cors({ origin: "https://solar-panel-project.onrender.com" }));
 app.use(cookieParser())
 app.use(express.json())
+app.use(express.static("dist"))
 
 app.use("/api/admin", require("./routes/admin.routes"))
 app.use("/api/contact", require("./routes/contact.route"))
@@ -16,7 +18,7 @@ app.use("/api/user", require("./routes/user.route"))
 
 
 app.use(/.*/, (req, res) => {
-    res.status(404).json({ message: "Resours Not found" })
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
 })
 app.use((err, req, res, next) => {
     console.log(err)
